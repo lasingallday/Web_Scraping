@@ -6,17 +6,32 @@ from flask_restful import Resource, Api
 from pymongo import MongoClient
 from bson import json_util
 
-http_proxy=http://127.0.0.1:5000/api/profiles
 # insert your connection details here
-# The below URL does not work
 # MONGO_URL = 'mongodb://<dbuser>:<pass>@<database URL>'
-MONGO_URL = 'mongodb://host/db_name'
+MONGO_URL = 'mongodb://localhost/27017'
 # connect to the MongoDB server
 client = MongoClient(MONGO_URL)
 # connect to the default database within the server
-db = client.get_default_database()
+# db = client.get_default_database()
+db = client.test_database
+# get collection database
+profiles = db.test_profiles
 
-db.profiles.insert( {"item":"card", "qty":15 } )
+import datetime
+# post = {"author": "Mike",
+# 		"text": "My first blog post!",
+# 		"tags": ["mongodb", "python", "pymongo"],
+# 		"date": datetime.datetime.utcnow()}
+# 
+# post_id = posts.insert_one(post).inserted_id
+
+db.profiles.insert( { "jobs":[{"employer":"NYPD","position":"Lieutenant","start":1988}]
+                    } )
+
+# db.inventory.insertOne(
+#    { item: "canvas", qty: 100, tags: ["cotton"], size: { h: 28, w: 35.5, uom: "cm" } }
+# )
+# db.profiles.insert( {"item":"card", "qty":15 } )
 
 #page = requests.get("http://dataquestio.github.io/web-scraping-pages/simple.html")
 #page
@@ -39,11 +54,11 @@ def hello():
 # 				}
 # 	return jsonify(fake_data)
 
-# # listing all profiles
-# @app.route("/api/profiles", methods=['GET'])
-# def list_profiles():
-#     real_data = db.profiles.find()
-#     return( json_util.dumps({"profiles":real_data}) )
+# listing all profiles
+@app.route("/api/profiles", methods=['GET'])
+def list_profiles():
+    real_data = db.profiles.find()
+    return( json_util.dumps({"profiles":real_data}) )
 
 """
 db = {0: 'do the dishes',
