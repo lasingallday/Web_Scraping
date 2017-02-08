@@ -12,26 +12,30 @@ MONGO_URL = 'mongodb://localhost/27017'
 # connect to the MongoDB server
 client = MongoClient(MONGO_URL)
 # connect to the default database within the server
-# db = client.get_default_database()
-db = client.test_database
-# get collection database
-profiles = db.test_profiles
+db = client.get_default_database()
+
+# db = client.test_database
+# # get collection database
+# profiles = db.test_profiles
 
 import datetime
-# post = {"author": "Mike",
+# post = {"author": "Jeff",
 # 		"text": "My first blog post!",
 # 		"tags": ["mongodb", "python", "pymongo"],
 # 		"date": datetime.datetime.utcnow()}
 # 
 # post_id = posts.insert_one(post).inserted_id
 
+# db.profiles.insert( { "_id":"jmclane","name":"John McLane",
+# 					  "jobs":[{"employer":"NYPD","position":"Lieutenant","start":1988}]
+#                     } )
 db.profiles.insert( { "jobs":[{"employer":"NYPD","position":"Lieutenant","start":1988}]
                     } )
-
-# db.inventory.insertOne(
-#    { item: "canvas", qty: 100, tags: ["cotton"], size: { h: 28, w: 35.5, uom: "cm" } }
-# )
-# db.profiles.insert( {"item":"card", "qty":15 } )
+db.profiles.insert( { "jobs":[{"employer":"NYPD","position":"Officer","start":1990},
+                             {"employer":"MIB","position":"Agent","start":1997}]
+                    } )
+db.profiles.insert( { "jobs":[{"employer":"Bag End","position":"Gardener","start":1954}]
+                    } )
 
 #page = requests.get("http://dataquestio.github.io/web-scraping-pages/simple.html")
 #page
@@ -54,6 +58,7 @@ def hello():
 # 				}
 # 	return jsonify(fake_data)
 
+# This works with inserted profiles, to test database
 # listing all profiles
 @app.route("/api/profiles", methods=['GET'])
 def list_profiles():
@@ -107,7 +112,7 @@ class TodoListResource(Resource):
 
 api.add_resource(HelloWorld, '/', '/<int:todo_id>')
 """
-
+db.dropDatabase()
 if __name__ == '__main__':
 	app.run(debug=True)
 
